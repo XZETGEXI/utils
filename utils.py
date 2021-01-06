@@ -17,54 +17,28 @@ def logger(verbose = True):
             print("‾" * W)
     return log
 
-class InputError(Exception):
-    def __init__(self, msg, expression):
-        self.msg = msg
-        self.expression = expression
-
-def sanitized_input(msg = "Input :"):
-    user_input = input(msg)
-    try:
-        return str(user_input)
-    except:
-        raise InputError("Bad input", user_input)
-
-class SelectionError(Exception):
-    def __init__(self, msg, expression = ""):
-        self.msg = msg
-        self.expression = expression
-
-def file_selector(dir_path = None):
-    """
-    Ask for input
-    Return selected file as str
-    """
-    
-    log("Entering file selector")
+def file_selector_corrected(dir_path = None):
+    """ File selector with numbered files, ignores folders """
     
     if not dir_path:
         current_dir = os.getcwd()
+    elif not os.path.exists(dir_path):
+        print("Invalid dir name")
+        return dir_path
     else:
-        try:
-            current_dir = os.chdir(dir_path)
-        except FileNotFoundError:
-            raise SelectionError("Invalid dir name")
-            
+        current_dir = os.chdir(dir_path)
+    
     file_list = [file for file in os.listdir(current_dir) if os.path.isfile(file)]
+    
     if not file_list:
-        raise SelectionError("Empty directory")
-        
-    file_dict = {str(n): file for n, file in enumerate(file_list)}
-    for n, file in file_dict.items():
-        print(str(n).rjust(3), "->", file)
+        print("Empty directory")
     
-    user_input = sanitized_input("Which file do you want? ")
-    
-    try:
-        user_input = str(user_input)
-        return file_dict[user_input]
-        
-    except KeyError:
-        raise SelectionError(user_input, "Selection not in range")
-    except:
-        raise SelectionError("Undefined error")
+    for i, f in enumerate(file_list):
+        print(str(i).rjust(3), "->", f)
+
+    while True:
+        try:
+            user_input = int(input("Which file do you want? "))
+            return file_list[user_input]
+        except (ValueError, IndexError):
+            print("Invalid input. Please try again.")
