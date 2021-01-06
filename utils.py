@@ -1,6 +1,17 @@
 import os
+import time
 
 from pprint import pprint
+
+
+
+def tic(): return time.time()
+
+def toc(start):
+    end = time.time()
+    msg = "TIME %.02f s" % (end - start)
+    print(msg.center(w, "_"))
+    return end
 
 
 
@@ -16,6 +27,8 @@ def logger(verbose = True):
                 print(str(msg).upper().rjust(W, "|"))
             print("‾" * W)
     return log
+
+
 
 def file_selector_corrected(dir_path = None):
     """ File selector with numbered files, ignores folders """
