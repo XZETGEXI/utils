@@ -8,6 +8,7 @@ from pprint import pprint
 def tic(): return time.time()
 
 def toc(start):
+    W, H = os.get_terminal_size()
     end = time.time()
     msg = "TIME %.02f s" % (end - start)
     print(msg.center(w, "_"))
