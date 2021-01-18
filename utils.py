@@ -11,7 +11,7 @@ def toc(start):
     W, H = os.get_terminal_size()
     end = time.time()
     msg = "TIME %.02f s" % (end - start)
-    print(msg.center(w, "_"))
+    print(msg.center(W, "_"))
     return end
 
 
